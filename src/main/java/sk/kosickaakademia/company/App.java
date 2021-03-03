@@ -1,6 +1,8 @@
 package sk.kosickaakademia.company;
 
 import sk.kosickaakademia.company.database.Database;
+import sk.kosickaakademia.company.entity.User;
+import sk.kosickaakademia.company.enumerator.Gender;
 
 /**
  * Hello world!
@@ -12,6 +14,7 @@ public class App
     {
         System.out.println( "Hello World!" );
         Database db=new Database();
-        db.getConnection();
+
+        db.insertNewUser(new User("Roman","Banik",35, 0));
     }
 }
