@@ -1,6 +1,10 @@
 package sk.kosickaakademia.company.enumerator;
 
 
+import sk.kosickaakademia.company.entity.User;
+
+import java.sql.PreparedStatement;
+import java.util.List;
 
 public enum Gender {
     MALE(0), FEMALE(1), OTHER(2);
@@ -13,4 +17,7 @@ public enum Gender {
     public int getValue(){
         return value;
     }
+
+
+
 }

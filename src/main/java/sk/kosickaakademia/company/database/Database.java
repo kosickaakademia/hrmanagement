@@ -4,10 +4,9 @@ import sk.kosickaakademia.company.entity.User;
 import sk.kosickaakademia.company.log.Log;
 
 import java.io.InputStream;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 public class Database {
@@ -63,4 +62,48 @@ public class Database {
         return false;
     }
 
+    public List<User> getFemales(){
+        log.info("Executing: getFemales()");
+        String sql = "SELECT * FROM user WHERE gender = 1";
+        try (Connection con = getConnection()) {
+            if(con!=null) {
+                PreparedStatement ps = con.prepareStatement(sql);
+                return executeSelect(ps);
+            }
+        }catch(Exception ex){
+            log.error(ex.toString());
+        }
+        return null;
+    }
+    public List<User> getMales(){
+        String sql = "SELECT * FROM user WHERE gender = 0";
+        try {
+            PreparedStatement ps = getConnection().prepareStatement(sql);
+            return executeSelect(ps);
+        }catch(Exception ex){
+            log.error(ex.toString());
+        }
+        return null;
+    }
+    public List<User> getUsersByAge(int from, int to){
+        return null;
+    }
+
+    private List<User> executeSelect(PreparedStatement ps) throws SQLException {
+        ResultSet rs =  ps.executeQuery();
+        List<User> list = new ArrayList<>();
+        int count = 0;
+        while(rs.next()){
+            count ++;
+           String fname = rs.getString("fname");
+           String lname = rs.getString("lname");
+           int age = rs.getInt("age");
+           int id = rs.getInt("id");
+           int gender = rs.getInt("gender");
+           User u=new User(id,fname,lname,age,gender);
+           list.add(u);
+        }
+        log.info("Number of records: "+ count);
+        return list;
+    }
 }
