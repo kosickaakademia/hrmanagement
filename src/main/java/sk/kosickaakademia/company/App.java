@@ -17,8 +17,9 @@ public class App
         System.out.println( "Hello World!" );
         Database db=new Database();
 
-        db.insertNewUser(new User("Roman","Banik",35, 0));
-        List<User> list = db.getMales();
-        System.out.println(list);
+
+        List<User> list = db.getUsersByAge(20,50);
+        for(User u:list)
+        System.out.println(u.toString());
     }
 }

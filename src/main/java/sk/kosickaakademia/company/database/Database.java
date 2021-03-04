@@ -86,6 +86,18 @@ public class Database {
         return null;
     }
     public List<User> getUsersByAge(int from, int to){
+
+        if(to<from)
+            return null;
+        try {
+            String sql = "SELECT * FROM user WHERE age >= ? AND age <= ?";
+            PreparedStatement ps = getConnection().prepareStatement(sql);
+            ps.setInt(1,from);
+            ps.setInt(2, to);
+            return executeSelect(ps);
+        }catch(Exception ex){
+            log.error(ex.toString());
+        }
         return null;
     }
 
@@ -106,4 +118,33 @@ public class Database {
         log.info("Number of records: "+ count);
         return list;
     }
+
+    public List<User> getAllUsers(){
+
+        //TO DO
+
+        return null;
+    }
+
+    public User getUserById(int id){
+
+        //TO DO
+
+        return null;
+    }
+
+    public boolean changeAge(int id, int newAge){
+        // TO DO
+        /*
+           vek: <1 ; 99>
+         */
+        return false;
+    }
+
+    public List<User> getUser(String pattern){
+        "mi" -> Miro, Mila, Jarmila, Kominar
+                // select    ....where fname like '%?%' OR lname like '%?%'
+        return null;
+    }
+
 }
