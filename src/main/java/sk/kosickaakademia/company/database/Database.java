@@ -2,6 +2,7 @@ package sk.kosickaakademia.company.database;
 
 import sk.kosickaakademia.company.entity.User;
 import sk.kosickaakademia.company.log.Log;
+import sk.kosickaakademia.company.util.Util;
 
 import java.io.InputStream;
 import java.sql.*;
@@ -43,12 +44,16 @@ public class Database {
     }
 
     public boolean insertNewUser(User user){
+        if(user==null)
+            return false;
+        String fname = new Util().normalizeName(user.getFname());
+        String lname = new Util().normalizeName(user.getLname());
         Connection con = getConnection();
         if(con!=null){
             try{
                 PreparedStatement ps = con.prepareStatement(INSERTQUERY);
-                ps.setString(1,user.getFname());
-                ps.setString(2,user.getLname());
+                ps.setString(1,fname);
+                ps.setString(2,lname);
                 ps.setInt(3,user.getAge());
                 ps.setInt(4,user.getGender().getValue());
                 int result = ps.executeUpdate();
@@ -121,16 +126,33 @@ public class Database {
 
     public List<User> getAllUsers(){
 
-        //TO DO
-
+        String sql = "SELECT * FROM user";
+        try {
+            PreparedStatement ps = getConnection().prepareStatement(sql);
+            return executeSelect(ps);
+        }catch(Exception ex){
+            log.error(ex.toString());
+        }
         return null;
+
     }
 
     public User getUserById(int id){
 
-        //TO DO
-
+        String sql = "SELECT * FROM user WHERE id = ?";
+        try {
+            PreparedStatement ps = getConnection().prepareStatement(sql);
+            ps.setInt(1,id);
+            List<User> list = executeSelect(ps);
+            if(list.isEmpty())
+                return null;
+            else
+                list.get(0);
+        }catch(Exception ex){
+            log.error(ex.toString());
+        }
         return null;
+
     }
 
     public boolean changeAge(int id, int newAge){
@@ -142,8 +164,8 @@ public class Database {
     }
 
     public List<User> getUser(String pattern){
-        "mi" -> Miro, Mila, Jarmila, Kominar
-                // select    ....where fname like '%?%' OR lname like '%?%'
+       /* "mi" -> Miro, Mila, Jarmila, Kominar
+                // select    ....where fname like '%?%' OR lname like '%?%'*/
         return null;
     }
 

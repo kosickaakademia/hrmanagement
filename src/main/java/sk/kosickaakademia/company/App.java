@@ -2,7 +2,7 @@ package sk.kosickaakademia.company;
 
 import sk.kosickaakademia.company.database.Database;
 import sk.kosickaakademia.company.entity.User;
-import sk.kosickaakademia.company.enumerator.Gender;
+import sk.kosickaakademia.company.util.Util;
 
 import java.util.List;
 
@@ -14,12 +14,12 @@ public class App
 {
     public static void main( String[] args )
     {
-        System.out.println( "Hello World!" );
+
         Database db=new Database();
+        //db.insertNewUser(new User("    MARiannA    ","    kováčiková       ",22,1));
 
-
-        List<User> list = db.getUsersByAge(20,50);
-        for(User u:list)
-        System.out.println(u.toString());
+        List<User> list = db.getAllUsers();
+        String text = new Util().getJson(list);
+        System.out.println(text);
     }
 }
