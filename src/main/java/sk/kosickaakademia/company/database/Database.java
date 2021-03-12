@@ -15,6 +15,7 @@ public class Database {
     Log log = new Log();
     private final String INSERTQUERY ="INSERT INTO user (fname, lname, age, gender) " +
             " VALUES ( ?, ?, ?, ?)";
+
     public Connection getConnection(){
         try {
             Properties props = new Properties();
@@ -31,6 +32,7 @@ public class Database {
         }
         return null;
     }
+
     public void closeConnection(Connection con)  {
 
         if(con!=null) {
@@ -80,6 +82,7 @@ public class Database {
         }
         return null;
     }
+
     public List<User> getMales(){
         String sql = "SELECT * FROM user WHERE gender = 0";
         try {
@@ -90,6 +93,7 @@ public class Database {
         }
         return null;
     }
+
     public List<User> getUsersByAge(int from, int to){
 
         if(to<from)
