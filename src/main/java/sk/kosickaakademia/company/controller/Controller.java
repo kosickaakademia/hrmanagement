@@ -2,12 +2,10 @@ package sk.kosickaakademia.company.controller;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import sk.kosickaakademia.company.database.Database;
 import sk.kosickaakademia.company.entity.User;
 import sk.kosickaakademia.company.enumerator.Gender;
@@ -69,5 +67,42 @@ public class Controller {
         List<User> list = new Database().getAllUsers();
         String json = new Util().getJson(list);
         return ResponseEntity.status(200).contentType(MediaType.APPLICATION_JSON).body(json);
+    }
+
+
+    @GetMapping("/users/age")    // /users/age?from=A&to=B
+    public ResponseEntity<String> getUsersByAge(@RequestParam(value="from") int from, @RequestParam(value="to") int to){
+       if(from>to || from<1){
+           return ResponseEntity.status(400).contentType(MediaType.APPLICATION_JSON).body("");
+       }
+        List<User> list = new Database().getUsersByAge(from, to);
+        String json = new Util().getJson(list);
+        return ResponseEntity.status(200).contentType(MediaType.APPLICATION_JSON).body(json);
+    }
+
+    @PutMapping ("/user/{id}")
+    public ResponseEntity<String> changeAge(@PathVariable Integer id, @RequestBody String body){
+        JSONObject object = null;
+        try {
+            object = (JSONObject) new JSONParser().parse(body);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(400).contentType(MediaType.APPLICATION_JSON).body("{}");
+        }
+
+        String data = String.valueOf(object.get("newage"));
+        System.out.println("data:"+data);
+        if(data.equalsIgnoreCase("null")){
+            return ResponseEntity.status(400).contentType(MediaType.APPLICATION_JSON).body("{}");
+        }
+        int newage = Integer.parseInt(data);
+        if(  newage<1)
+            return ResponseEntity.status(400).contentType(MediaType.APPLICATION_JSON).body("{}");
+
+        boolean result = new Database().changeAge(id,newage);
+        int status;
+        if(result) status= 200; else status = 404;
+        return ResponseEntity.status(status).contentType(MediaType.APPLICATION_JSON).body("{}");
+
     }
 }

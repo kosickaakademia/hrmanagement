@@ -20,6 +20,10 @@ public class Database {
         try {
             Properties props = new Properties();
             InputStream loader = getClass().getClassLoader().getResourceAsStream("database.properties");
+            if(loader==null){
+                log.error("Loader is null!");
+                return null;
+            }
             props.load(loader);
             String url = props.getProperty("url");
             String username=props.getProperty("username");
@@ -103,6 +107,7 @@ public class Database {
             PreparedStatement ps = getConnection().prepareStatement(sql);
             ps.setInt(1,from);
             ps.setInt(2, to);
+
             return executeSelect(ps);
         }catch(Exception ex){
             log.error(ex.toString());

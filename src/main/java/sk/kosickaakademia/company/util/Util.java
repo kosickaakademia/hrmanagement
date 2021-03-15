@@ -13,7 +13,7 @@ public class Util {
             /* ak user==null   { }
         { "datetime":"1254-12-25..." , "size":5 , "users":[ {...},{},{},{},{} ] }
          */
-        if(list.isEmpty()) return "{}";
+        if(list==null || list.isEmpty()) return "{}";
 
         JSONObject object = new JSONObject();
         object.put("datetime",getCurrentDateTime());
