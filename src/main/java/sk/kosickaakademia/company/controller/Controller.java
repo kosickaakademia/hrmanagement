@@ -12,7 +12,6 @@ import sk.kosickaakademia.company.enumerator.Gender;
 import sk.kosickaakademia.company.log.Log;
 import sk.kosickaakademia.company.util.Util;
 
-import javax.xml.crypto.Data;
 import java.util.List;
 
 @RestController
@@ -96,13 +95,20 @@ public class Controller {
             return ResponseEntity.status(400).contentType(MediaType.APPLICATION_JSON).body("{}");
         }
         int newage = Integer.parseInt(data);
-        if(  newage<1)
+        if(newage<1)
             return ResponseEntity.status(400).contentType(MediaType.APPLICATION_JSON).body("{}");
 
         boolean result = new Database().changeAge(id,newage);
         int status;
-        if(result) status= 200; else status = 404;
-        return ResponseEntity.status(status).contentType(MediaType.APPLICATION_JSON).body("{}");
+        if(result) status= 204; else status = 404;
+        return ResponseEntity.status(status).contentType(MediaType.APPLICATION_JSON).body("");
 
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<String> overview(){
+        List<User> list = new Database().getAllUsers();
+        String jsonOverview = new Util().getOverview(list);
+        return ResponseEntity.status(200).contentType(MediaType.APPLICATION_JSON).body(jsonOverview.toString());
     }
 }
